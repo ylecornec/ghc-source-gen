@@ -22,14 +22,14 @@ module GHC.SourceGen.Type
     ) where
 
 import Data.String (fromString)
-#if MIN_VERSION_ghc(9,0,0)
+#if MIN_VERSION_ghc(9,0,0) && !MIN_VERSION_ghc(9,8,0)
 import GHC.Hs.Type
 import GHC.Parser.Annotation
 #else
 import GHC.Hs.Type
 #endif
 
-#if MIN_VERSION_ghc(9,4,0)
+#if MIN_VERSION_ghc(9,4,0) && !MIN_VERSION_ghc(9,8,0)
 import Language.Haskell.Syntax.Extension
 #endif
 
@@ -119,7 +119,9 @@ infixr 0 ==>
 -- > kindedVar "x" (var "A")
 kindedVar :: OccNameStr -> HsType' -> HsTyVarBndr'
 kindedVar v t = withEpAnnNotUsed KindedTyVar
-#if MIN_VERSION_ghc(9,0,0)
+#if MIN_VERSION_ghc(9,8,0)
+                HsBndrRequired
+#elif MIN_VERSION_ghc(9,0,0)
                 ()
 #endif
                 (typeRdrName $ UnqualStr v) (mkLocated t)

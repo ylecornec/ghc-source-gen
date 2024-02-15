@@ -55,7 +55,8 @@ module GHC.SourceGen.Decl
 import GHC (LexicalFixity(Prefix))
 import GHC.Data.Bag (listToBag)
 
-#if MIN_VERSION_ghc(9,6,0)
+#if MIN_VERSION_ghc(9,8,0)
+#elif MIN_VERSION_ghc(9,6,0)
 import GHC (GhcPs, LayoutInfo (NoLayoutInfo))
 #else
 import GHC.Types.SrcLoc (LayoutInfo(NoLayoutInfo))
@@ -71,6 +72,7 @@ import BasicTypes (DerivStrategy(..))
 import GHC.Hs.Binds
 import GHC.Hs.Decls
 
+#if !MIN_VERSION_ghc(9,8,0)
 import GHC.Hs.Type
     ( ConDeclField(..)
     , FieldOcc(..)
@@ -96,8 +98,10 @@ import GHC.Hs.Type
     , hsUnrestricted
 #endif
     )
+#endif
 
-#if MIN_VERSION_ghc(9,2,0)
+#if MIN_VERSION_ghc(9,8,0)
+#elif MIN_VERSION_ghc(9,2,0)
 import GHC.Parser.Annotation (AnnSortKey(..), EpAnn(..))
 #elif MIN_VERSION_ghc(8,10,0)
 import GHC.Hs.Extension (NoExtField(NoExtField))

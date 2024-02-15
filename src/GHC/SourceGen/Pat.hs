@@ -19,7 +19,12 @@ module GHC.SourceGen.Pat
     ) where
 
 import GHC.Hs.Type
+#if MIN_VERSION_ghc(9,8,0)
+-- Module ‘GHC.Hs.Pat’ does not export ‘LHsRecField'’ anymore
+import GHC.Hs.Pat
+#else
 import GHC.Hs.Pat hiding (LHsRecField')
+#endif
 
 import GHC.SourceGen.Name.Internal
 import GHC.SourceGen.Pat.Internal

@@ -27,7 +27,10 @@ module GHC.SourceGen.Module
     )  where
 
 import GHC.Hs.ImpExp
-    ( IEWildcard(..), IEWrappedName(..), IE(..)
+    ( IEWildcard(..), IEWrappedName(..)
+#if !MIN_VERSION_ghc(9,8,0)
+    , IE(..)
+#endif
 #if MIN_VERSION_ghc(9,6,0)
     , ImportListInterpretation (EverythingBut, Exactly), XImportDeclPass (ideclSourceText, ideclImplicit)
 #else
@@ -44,13 +47,15 @@ import GHC.Hs
     , EpAnn(..)
 #endif
 #if MIN_VERSION_ghc(9,6,0)
-    , hsmodDeprecMessage, hsmodHaddockModHeader, hsmodAnn, AnnKeywordId, XModulePs (XModulePs, hsmodLayout), noAnn, LayoutInfo (NoLayoutInfo), GhcPs, XImportDeclPass (XImportDeclPass, ideclAnn), SrcSpanAnnA, noExtField
+    , hsmodDeprecMessage, hsmodHaddockModHeader, hsmodAnn,  XModulePs (XModulePs, hsmodLayout), noAnn, LayoutInfo (NoLayoutInfo), GhcPs, XImportDeclPass (XImportDeclPass, ideclAnn), SrcSpanAnnA, noExtField
 #endif
     )
 #if MIN_VERSION_ghc(9,0,0) && !MIN_VERSION_ghc(9,6,0)
 import GHC.Types.SrcLoc (LayoutInfo(..))
 #endif
-#if MIN_VERSION_ghc(9,0,0)
+#if MIN_VERSION_ghc(9,8,0)
+import GHC.Unit.Module (IsBootInterface(..))
+#elif MIN_VERSION_ghc(9,0,0)
 import GHC.Unit.Module (IsBootInterface(..))
 import GHC.Types.Name.Reader (RdrName)
 #else
@@ -62,10 +67,18 @@ import GHC.Types.PkgQual (RawPkgQual(..))
 
 import GHC.SourceGen.Syntax.Internal
 import GHC.SourceGen.Name.Internal
+
+#if !MIN_VERSION_ghc(9,8,0)
 import GHC.SourceGen.Lit.Internal (noSourceText)
+#endif
+
 import GHC.SourceGen.Name (unqual)
-#if MIN_VERSION_ghc(9,4,0)
+
+#if MIN_VERSION_ghc(9,4,0) && !MIN_VERSION_ghc(9,8,0)
 import GHC.SourceGen.Name (RdrNameStr, ModuleNameStr(unModuleNameStr), OccNameStr)
+#endif
+
+#if MIN_VERSION_ghc(9,4,0)
 import GHC.Types.SourceText (SourceText(NoSourceText))
 import GHC.Types.SrcLoc (GenLocated)
 #endif

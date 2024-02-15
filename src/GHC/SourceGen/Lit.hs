@@ -28,7 +28,12 @@ import BasicTypes (mkFractionalLit, mkIntegralLit)
 import FastString (fsLit)
 #endif
 import GHC.Hs.Lit
-import GHC.Hs.Expr (noExpr, noSyntaxExpr, HsExpr(..))
+import GHC.Hs.Expr (
+#if !MIN_VERSION_ghc(9,8,0)
+  noExpr,
+#endif
+  noSyntaxExpr,
+  HsExpr(..))
 import GHC.Hs.Pat (Pat(..))
 
 import GHC.SourceGen.Lit.Internal

@@ -22,7 +22,10 @@ import GHC.Hs.Type
     ( HsType(..)
     , HsTyVarBndr(..)
     )
-import GHC.Hs (IE(..), IEWrappedName(..)
+import GHC.Hs (IEWrappedName(..)
+#if !MIN_VERSION_ghc(9,8,0)
+    , IE(..)
+#endif
 #if MIN_VERSION_ghc(9,6,0)
     , noExtField
 #endif
@@ -54,6 +57,10 @@ import GHC.SourceGen.Expr.Internal
 import GHC.SourceGen.Name.Internal
 import GHC.SourceGen.Syntax.Internal
 import GHC.SourceGen.Type.Internal
+
+#if MIN_VERSION_ghc(9,8,0)
+import Language.Haskell.Syntax.Type (HsBndrVis(..))
+#endif
 
 -- | A class for wrapping terms in parentheses.
 class Par e where

@@ -17,7 +17,7 @@ import SrcLoc (unLoc)
 import GHC.SourceGen.Lit.Internal
 import GHC.SourceGen.Syntax.Internal
 
-#if MIN_VERSION_ghc(9,4,0)
+#if MIN_VERSION_ghc(9,4,0) && !MIN_VERSION_ghc(9,8,0)
 import Language.Haskell.Syntax.Extension
 #endif
 
