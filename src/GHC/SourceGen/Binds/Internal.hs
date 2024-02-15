@@ -7,7 +7,10 @@
 {-# LANGUAGE CPP #-}
 module GHC.SourceGen.Binds.Internal where
 
-#if MIN_VERSION_ghc(9,0,0)
+#if MIN_VERSION_ghc(9,8,0)
+import GHC.Types.Basic (Origin(Generated), DoPmc(DoPmc))
+import GHC.Data.Bag (listToBag)
+#elif MIN_VERSION_ghc(9,0,0)
 import GHC.Types.Basic (Origin(Generated))
 import GHC.Data.Bag (listToBag)
 #else
@@ -83,7 +86,9 @@ data RawGRHSs = RawGRHSs
 
 matchGroup :: HsMatchContext' -> [RawMatch] -> MatchGroup' LHsExpr'
 matchGroup context matches =
-#if MIN_VERSION_ghc(9,6,0)
+#if MIN_VERSION_ghc(9,8,0)
+    MG (Generated DoPmc)
+#elif MIN_VERSION_ghc(9,6,0)
     MG Generated
 #else
     noExt MG
