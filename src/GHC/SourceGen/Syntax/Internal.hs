@@ -6,6 +6,12 @@
 
 {-# LANGUAGE CPP #-}
 {-# LANGUAGE OverloadedStrings #-}
+
+-- Needed for the type signature of ieThingWith
+#if MIN_VERSION_ghc(9,8,0)
+{-# LANGUAGE TypeOperators #-}
+#endif
+
 module GHC.SourceGen.Syntax.Internal where
 
 
@@ -122,6 +128,49 @@ noExtOrPlaceHolder = noExt
 #else
 noExtOrPlaceHolder :: (GHC.PlaceHolder -> a) -> a
 noExtOrPlaceHolder = withPlaceHolder
+#endif
+
+#if MIN_VERSION_ghc(9,8,0)
+ieThingAll :: (GHC.XIEThingAll pass ~ (Maybe a, b)) =>
+  b -> GHC.XRec pass (GHC.IEWrappedName pass) -> IE pass
+ieThingAll x = GHC.IEThingAll (Nothing, x)
+#else
+ieThingAll :: GHC.XIEThingAll pass -> GHC.XRec pass (GHC.IEWrappedName pass) -> IE pass
+ieThingAll x = GHC.IEThingAll x
+#endif
+
+#if MIN_VERSION_ghc(9,8,0)
+ieThingWith :: (GHC.XIEThingWith pass ~ (Maybe a, b)) =>
+  b
+  -> GHC.XRec pass (GHC.IEWrappedName pass)
+  -> GHC.IEWildcard
+  -> [GHC.XRec pass (GHC.IEWrappedName pass)]
+  -> IE pass
+ieThingWith x = GHC.IEThingWith (Nothing, x)
+#else
+ieThingWith :: GHC.XIEThingWith pass
+  -> GHC.XRec pass (GHC.IEWrappedName pass)
+  -> GHC.IEWildcard
+  -> [GHC.XRec pass (GHC.IEWrappedName pass)]
+  -> IE pass
+ieThingWith x = GHC.IEThingWith x
+#endif
+
+#if MIN_VERSION_ghc(9,8,0)
+ieModuleContents :: (GHC.XIEModuleContents pass ~ (Maybe a, b)) =>
+  b -> GHC.XRec pass GHC.ModuleName -> IE pass
+ieModuleContents x = GHC.IEModuleContents (Nothing, x)
+#else
+ieModuleContents :: GHC.XIEModuleContents pass -> GHC.XRec pass GHC.ModuleName -> IE pass
+ieModuleContents x = GHC.IEModuleContents x
+#endif
+
+
+ieVar :: GenLocated SrcSpanAnnA (GHC.IEWrappedName GhcPs) -> IE GhcPs
+#if MIN_VERSION_ghc(9,8,0)
+ieVar = GHC.IEVar Nothing
+#else
+ieVar = noExt GHC.IEVar
 #endif
 
 #if MIN_VERSION_ghc(9,2,0)

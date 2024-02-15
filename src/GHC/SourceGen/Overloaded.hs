@@ -291,7 +291,7 @@ instance BVar HsTyVarBndr' where
 
 instance Var IE' where
     var n =
-      noExt IEVar $ mkLocated $
+      ieVar $ mkLocated $
 #if MIN_VERSION_ghc(9,6,0)
       (IEName noExtField)
 #else
