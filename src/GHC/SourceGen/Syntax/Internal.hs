@@ -330,7 +330,10 @@ type IE' = IE GhcPs
 -- Instances:
 --
 -- * 'GHC.SourceGen.Overloaded.BVar'
-#if MIN_VERSION_ghc(9,0,0)
+#if MIN_VERSION_ghc(9,8,0)
+type HsTyVarBndr' = HsTyVarBndr (GHC.HsBndrVis GhcPs) GhcPs
+type HsTyVarBndrS' = HsTyVarBndr Specificity GhcPs
+#elif MIN_VERSION_ghc(9,0,0)
 type HsTyVarBndr' = HsTyVarBndr () GhcPs
 type HsTyVarBndrS' = HsTyVarBndr Specificity GhcPs
 #else
