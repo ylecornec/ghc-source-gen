@@ -52,6 +52,9 @@ import SrcLoc (unLoc, GenLocated(..))
 import GHC.Parser.Annotation (EpAnn(..))
 #endif
 
+#if MIN_VERSION_ghc(9,8,0)
+import qualified Language.Haskell.Syntax.Extension as E
+#endif
 import GHC.SourceGen.Binds.Internal
 import GHC.SourceGen.Binds
 import GHC.SourceGen.Expr.Internal
@@ -294,7 +297,9 @@ recordUpd e fs =
             }
     withPlaceHolder4 = withPlaceHolder . withPlaceHolder . withPlaceHolder
                             . withPlaceHolder
-#if MIN_VERSION_ghc(9,2,0)
+#if MIN_VERSION_ghc(9,8,0)
+    toRecordUpdFields rufs = RegularRecUpdFields { xRecUpdFields = E.NoExtField, recUpdFields  = rufs }
+#elif MIN_VERSION_ghc(9,2,0)
     toRecordUpdFields = Left
 #else
     toRecordUpdFields = id
