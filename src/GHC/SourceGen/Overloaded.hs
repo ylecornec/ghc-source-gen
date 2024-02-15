@@ -278,7 +278,13 @@ instance Var HsType' where
 instance BVar HsType' where
     bvar = var . UnqualStr
 
-#if MIN_VERSION_ghc(9,0,0)
+#if MIN_VERSION_ghc(9,8,0)
+instance BVar HsTyVarBndr' where
+    bvar = withEpAnnNotUsed UserTyVar HsBndrRequired . typeRdrName . UnqualStr
+
+instance BVar HsTyVarBndrS' where
+    bvar = withEpAnnNotUsed UserTyVar SpecifiedSpec . typeRdrName . UnqualStr
+#elif MIN_VERSION_ghc(9,0,0)
 instance BVar HsTyVarBndr' where
     bvar = withEpAnnNotUsed UserTyVar () . typeRdrName . UnqualStr
 
