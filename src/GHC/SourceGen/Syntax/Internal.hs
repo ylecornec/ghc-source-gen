@@ -375,7 +375,12 @@ type LHsSigWcType' = LHsSigWcType GhcPs
 type LHsWcType' = LHsWcType GhcPs
 type HsDerivingClause' = HsDerivingClause GhcPs
 type LHsRecField' arg = LHsRecField GhcPs arg
+
+#if MIN_VERSION_ghc(9,8,0)
+type LHsRecUpdField' = LHsRecUpdField GhcPs GhcPs
+#else
 type LHsRecUpdField' = LHsRecUpdField GhcPs
+#endif
 type LPat' = LPat GhcPs
 type TyFamInstDecl' = TyFamInstDecl GhcPs
 
